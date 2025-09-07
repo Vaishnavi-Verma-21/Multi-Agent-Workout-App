@@ -1,6 +1,6 @@
-streamlit
-langflow
-astrapy
+streamlit==1.38.0
+langflow==1.0.12
+astrapy==0.0.11
 python-dotenv
 requests
 pydantic
