@@ -1,14 +1,14 @@
-from astrapy import DataAPIClient
 import streamlit as st
+from astrapy import DataAPIClient
 
-# Use Streamlit secrets instead of dotenv
+# Fetch secrets
 ASTRA_DB_ID = st.secrets["ASTRA_DB_ID"]
 ASTRA_DB_TOKEN = st.secrets["ASTRA_DB_APPLICATION_TOKEN"]
-KEYSPACE_NAME = st.secrets.get("ASTRA_KEYSPACE", "default_keyspace")  # optional default
+KEYSPACE_NAME = st.secrets["ASTRA_KEYSPACE"]
 
 @st.cache_resource
 def get_db():
-    # Initialize Astra client with DB ID and token
+    # Initialize Astra DB client
     client = DataAPIClient(
         astra_database_id=ASTRA_DB_ID,
         astra_application_token=ASTRA_DB_TOKEN
