@@ -14,7 +14,7 @@ APPLICATION_TOKEN = os.getenv("LANGFLOW_TOKEN")
 
 def dict_to_string(obj, level=0):
     strings = []
-    indent = "  " * level  # Indentation for nested levels
+    indent = "  " * level
     
     if isinstance(obj, dict):
         for key, value in obj.items():
@@ -35,39 +35,38 @@ def dict_to_string(obj, level=0):
 
 def ask_ai(profile, question):
     TWEAKS = {
-        "TextInput-XjIKI": {
-            "input_value": question
-        },
-        "TextInput-176Ns": {
-            "input_value": dict_to_string(profile)
-        },
+        "TextInput-XjIKI": {"input_value": question},
+        "TextInput-176Ns": {"input_value": dict_to_string(profile)},
     }
 
-    result = run_flow_from_json(flow="AskAIV2.json",
-                                input_value="message",
-                                fallback_to_env_vars=True,
-                                tweaks=TWEAKS)
+    result = run_flow_from_json(
+        flow="AskAIV2.json",
+        input_value="message",
+        fallback_to_env_vars=True,
+        tweaks=TWEAKS
+    )
 
-    return result[0].outputs[0].results["text"].data["text"]
+    try:
+        return result[0].outputs[0].results["text"].data["text"]
+    except Exception as e:
+        return {"error": str(e), "raw_result": result}
 
 
 def get_macros(profile, goals):
     TWEAKS = {
-        "TextInput-PR5Jb": {
-            "input_value": ", ".join(goals)
-        },
-        "TextInput-PrfY9": {
-            "input_value": dict_to_string(profile)
-        }
+        "TextInput-PR5Jb": {"input_value": ", ".join(goals)},
+        "TextInput-PrfY9": {"input_value": dict_to_string(profile)},
     }
     return run_flow("", tweaks=TWEAKS, application_token=APPLICATION_TOKEN)
 
 
-def run_flow(message: str,
-  output_type: str = "chat",
-  input_type: str = "chat",
-  tweaks: Optional[dict] = None,
-  application_token: Optional[str] = None) -> dict:
+def run_flow(
+    message: str,
+    output_type: str = "chat",
+    input_type: str = "chat",
+    tweaks: Optional[dict] = None,
+    application_token: Optional[str] = None
+) -> dict:
     api_url = f"{BASE_API_URL}/lf/{LANGFLOW_ID}/api/v1/run/macros"
 
     payload = {
@@ -75,11 +74,24 @@ def run_flow(message: str,
         "output_type": output_type,
         "input_type": input_type,
     }
-    headers = None
     if tweaks:
         payload["tweaks"] = tweaks
+
+    headers = None
     if application_token:
-        headers = {"Authorization": "Bearer " + application_token, "Content-Type": "application/json"}
+        headers = {
+            "Authorization": f"Bearer {application_token}",
+            "Content-Type": "application/json"
+        }
+
     response = requests.post(api_url, json=payload, headers=headers)
-    
-    return json.loads(response.json()["outputs"][0]["outputs"][0]["results"]["text"]["data"]["text"])
+
+    try:
+        data = response.json()
+        # Try to extract clean text
+        return json.loads(
+            data["outputs"][0]["outputs"][0]["results"]["text"]["data"]["text"]
+        )
+    except Exception as e:
+        # Fallback: return raw response for debugging
+        return {"error": str(e), "raw_response": response.text}
