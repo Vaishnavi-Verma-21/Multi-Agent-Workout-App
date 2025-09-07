@@ -1,5 +1,5 @@
-streamlit==1.38.0
-langflow==1.5.1
+streamlit==1.29.0
+langflow==1.0.12
 astrapy==0.6.11
 python-dotenv
 requests
