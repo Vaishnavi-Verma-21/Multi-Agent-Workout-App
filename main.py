@@ -102,6 +102,7 @@ def macros():
         profile["nutrition"] = result
         nutrition.success("AI has generated the results.")
 
+    # ✅ FIXED: form submit button now properly indented
     with nutrition.form("nutrition_form", border=False):
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -133,7 +134,8 @@ def macros():
                 value=profile["nutrition"].get("carbs", 0),
             )
 
-        if st.form_submit_button("Save"):
+        save_submit = st.form_submit_button("Save")
+        if save_submit:
             with st.spinner():
                 st.session_state.profile = update_personal_info(
                     profile,
@@ -144,6 +146,7 @@ def macros():
                     carbs=carbs,
                 )
                 st.success("Information saved")
+
 
 @st.fragment()
 def notes():
@@ -165,6 +168,7 @@ def notes():
             st.session_state.notes.append(note)
             st.rerun()
 
+
 @st.fragment()
 def ask_ai_func():
     st.subheader('Ask AI')
@@ -173,6 +177,7 @@ def ask_ai_func():
         with st.spinner():
             result = ask_ai(st.session_state.profile, user_question)
             st.write(result)
+
 
 def forms():
     if "profile" not in st.session_state:
