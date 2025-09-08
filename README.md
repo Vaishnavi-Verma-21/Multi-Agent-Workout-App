@@ -63,3 +63,26 @@ Streamlit → Frontend + LLM handling
 Langflow → Visual AI flow builder (low-code)
 
 Astra DB → Vector database for RAG implementation
+
+## Workout App
+---
+<img src="images/1.png" alt="Alt text" width="600" height="1000">
+<img src="images/2.png" alt="Alt text" width="600" height="1000">
+
+### AI Generated recommendation for Calories, Protein, Fat and Carbs (Default is set to 2000 calories, 140 Protein, 20 Fat and 100 Carbs)
+---
+
+<img src="images/3.png" alt="Alt text" width="600" height="1000">
+<img src="images/4.png" alt="Alt text" width="600" height="1000">
+
+### Addition of notes
+---
+
+<img src="images/5.png" alt="Alt text" width="600" height="1200">
+
+### General question asked from AI
+---
+
+<img src="images/6.png" alt="Alt text" width="600" height="1000">
+<img src="images/7.png" alt="Alt text" width="600" height="1000">
+<img src="images/8.png" alt="Alt text" width="600" height="1000">
